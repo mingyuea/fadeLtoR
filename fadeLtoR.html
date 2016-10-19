@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="jquery-3.1.0.min.js"></script>
+    </head>
+    <style>
+        
+        #imgback{
+            position:relative;
+            max-width:860px;
+            height:254px;
+            background-image:url('siteImg/smoke3.png');
+            background-size:contain;
+            background-repeat: no-repeat;
+            opacity:0.4;
+        }
+        body{
+            width:100%;
+            height:100%;
+            background-color:black;
+            overflow-x:hidden;
+
+        }
+        table{
+            position: absolute;
+            border-collapse:collapse;
+            width:100%;
+            height:100%;
+        }
+        td{
+            margin:auto;
+            background-color:black;
+            opacity:1;
+        }
+    </style>
+    <body>
+        <div id="imgback">
+        <table>
+            <tbody id="grid"> </tbody>
+        </table>
+        </div>
+        
+        <script>
+            var rowCount=430;  //creates rows with 430 td's in them, this number should ideally be adjusted according to the dimensions of the image itself 
+            var rows="<tr>";
+            var rows2="<tr>";
+            for(i=1;i<rowCount;i++){
+                rows=rows+"<td class='col"+i+"'></td>";
+                rows2=rows2+"<td class='colA"+(rowCount-i)+"'></td>";
+            }
+            rows2=rows2+"</tr>";
+            rows=rows+"</tr>";
+            var matrix2=rows2;
+            var matrix=rows;
+                        
+            document.getElementById("grid").innerHTML=matrix;
+            
+            $(document).ready(function(){
+                var fading=setInterval(addFade,40);
+                var colCount=0;
+                function addFade(){
+                    var opac=0;
+                    var colNum=".col"+colCount;
+                    for(i=0;i<51;i++){ //changes the current column opacity to full black, and the next 40 columns by a varying gradient too
+                        var nextCol=colCount+i;
+                        var colOpac=opac+0.02*i;
+                        var rgbOpac="rgba(0,0,0,"+colOpac+")";
+                        var nextColNo=".col"+nextCol;
+                        $(nextColNo).css("background-color",rgbOpac);
+                    }
+                    colCount++;
+                    if(colCount==rowCount){
+                        clearInterval(fading);
+                        colCount=0;
+                        fading=setInterval(fadeDis,40);
+                    }
+                }
+                function fadeDis(){
+                    var opac=1;
+                    var colNum=".col"+colCount;
+                    for(i=0;i<51;i++){
+                        var nextCol=colCount+i;
+                        var colOpac=opac-0.02*i;
+                        var rgbOpac="rgba(0,0,0,"+colOpac+")";
+                        var nextColNo=".col"+nextCol;
+                        $(nextColNo).css("background-color",rgbOpac);
+                    }
+                    colCount++;
+                    if(colCount==rowCount){
+                        clearInterval(fading);
+                        colCount=0;
+                        fading=setInterval(addFade,40);
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
